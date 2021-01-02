@@ -1,12 +1,13 @@
+
 class TestCase1 extends utest.Test {
-	var field:String;
+	var example:ExampleClass;
 
 	// synchronous setup
 	public function setup() {
-		field = "some";
+		example = new ExampleClass();
 	}
 
 	function testFieldIsSome() {
-		utest.Assert.equals("some", field);
+		utest.Assert.equals("some", example.field);
 	}
 }

@@ -1,8 +1,8 @@
 --class-path src
 --define doc-gen
---macro include('hxtemplate')
+--macro include('hxscene')
 --each
 
 --next
 --xml docs/doc.xml
---cmd haxelib run dox -i docs -in hxtemplate
+--cmd haxelib run dox -i docs -in hxscene

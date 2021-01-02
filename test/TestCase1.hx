@@ -1,4 +1,4 @@
-import hxtemplate.ExampleClass;
+import hxscene.ExampleClass;
 
 class TestCase1 extends utest.Test {
 	var example:ExampleClass;

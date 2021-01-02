@@ -1,4 +1,4 @@
-package hxtemplate;
+package hxscene;
 
 /**
  * Simple class with a single property, which is `field`.

@@ -1,10 +1,8 @@
-![hxACME](TITLE.svg)
+![hxSCENE](TITLE.svg)
 
 [![Build Status](https://travis-ci.com/moonhappy/hxscene.svg?branch=main)](https://travis-ci.com/moonhappy/hxscene)
 
-Some description about the project...
-
-_**NOTE:** It is recommend to copy this repository contents and have it as a basis for the new Haxe Library. Be sure to to a global find of "acme" and "template" first and replace with the new project's name. Also, be sure to update the build badge in this README.md document._
+Manage game objects using a theatre/stage like paradigm, using scene constructs.
 
 # Testing
 

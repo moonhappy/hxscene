@@ -1,3 +1,4 @@
+
 class TestAll {
 	static public function main() {
 		// the long way

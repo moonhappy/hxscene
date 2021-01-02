@@ -1,3 +1,4 @@
+import hxtemplate.ExampleClass;
 
 class TestCase1 extends utest.Test {
 	var example:ExampleClass;

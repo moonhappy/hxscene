@@ -4,7 +4,7 @@
 
 --cmd echo "\n[Building CPP]"
 --next
-test-cpp.hxml
+hxml/test-cpp.hxml
 
 
 

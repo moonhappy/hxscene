@@ -8,5 +8,5 @@ before_install:
   - haxelib install dox
 
 hxml:
-  - test.hxml
-  - gen-docs.hxml
+  - hxml/test-ci.hxml
+  - hxml/gen-docs.hxml

@@ -6,7 +6,7 @@
             "type": "hxcpp",
             "request": "launch",
             "program": "${workspaceFolder}/bin/cpp/TestAll-debug",
-            "preLaunchTask": "haxe: test-cpp.hxml"
+            "preLaunchTask": "haxe: compile.hxml"
         }
     ]
 }

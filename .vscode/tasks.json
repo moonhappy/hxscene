@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "hxml",
-			"file": "test-cpp.hxml",
+			"file": "compile.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -14,7 +14,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"label": "haxe: test-cpp.hxml"
+			"label": "haxe: compile.hxml"
 		}
 	]
 }

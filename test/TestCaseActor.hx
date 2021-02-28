@@ -12,4 +12,9 @@ class TestCaseActor extends utest.Test {
 		hiWorldActor.draw();
 		utest.Assert.equals("Hello World", hiWorldActor.message);
 	}
+
+	function testActorSignal() {
+		hiWorldActor.signalCue("test_actor__bye", null);
+		utest.Assert.equals("Bye World", hiWorldActor.message);
+	}
 }

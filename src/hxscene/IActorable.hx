@@ -10,4 +10,9 @@ package hxscene;
  */
 interface IActorable extends IEntity extends IUpdateable extends IDrawable extends ILoadable extends ISignalable {
 
+    /**
+     * Reference to the actor's assigned director.
+     */
+    public var director:IDirectorable;
+
 }

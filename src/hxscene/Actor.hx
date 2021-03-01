@@ -11,7 +11,6 @@ package hxscene;
 class Actor implements IActorable {
 
 	private var scene:ISceneable;
-	private var director:IDirectorable;
 	private var actorCues:Map<String, Array<(Any)->Void>>;
 	private var visible:Bool;
 	private var active:Bool;
@@ -28,7 +27,14 @@ class Actor implements IActorable {
 	public var drawLayer:Int;
 
 	/**
+     * Reference to the actor's assigned director.
+     */
+	public var director:IDirectorable;
+
+	/**
 	 * Default constructor.
+	 * 
+	 * @param drawLayer The draw layer the actor will render to.
 	 */
 	public function new(drawLayer = 0) {
 		this.id = -1;
@@ -164,6 +170,10 @@ class Actor implements IActorable {
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
 	public function registerCue(cueName:String, callback:(Any)->Void):Void {
+		// Check params
+		if (cueName == null || callback == null) {
+			return;
+		}
 		// Initial state, create new array
 		if (this.actorCues.exists(cueName) == false) {
 			this.actorCues.set(cueName, [callback]);
@@ -191,6 +201,10 @@ class Actor implements IActorable {
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
 	public function unregisterCue(cueName:String, callback:(Any)->Void):Void {
+		// Check params
+		if (cueName == null || callback == null) {
+			return;
+		}
 		// Check if cue already registered and cancel if not.
 		var cbArray = this.actorCues.get(cueName);
 		if (cbArray == null) {
@@ -209,13 +223,15 @@ class Actor implements IActorable {
 	 * 
 	 * @param cueName The name of the cue being called.
 	 * @param userData Additional data to pass to the cue function.
+	 * @param director Reference to the invoking director.
 	 */
-	public function signalCue(cueName:String, userData:Any):Void {
-		var signals:Array<(Any)->Void> = this.actorCues.get(cueName);
-		if (signals != null) {
-			for (cb in signals) {
-				cb(userData);
-			}
+	public function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null):Void {
+		var signals = this.actorCues.get(cueName);
+		if (signals == null) {
+			return;
+		}
+		for (cb in signals) {
+			cb(userData);
 		}
 	}
 

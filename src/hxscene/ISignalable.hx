@@ -35,7 +35,8 @@ interface ISignalable {
 	 * 
 	 * @param cueName The name of the cue being called.
 	 * @param userData Additional data to pass to the cue function.
+	 * @param director Reference to the invoking director.
 	 */
-	public function signalCue(cueName:String, userData:Any):Void;
+	public function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null):Void;
 
 }

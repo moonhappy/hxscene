@@ -1,5 +1,6 @@
 
 class TestCaseActor extends utest.Test {
+
 	var hiWorldActor:TestActor;
 
 	// synchronous setup
@@ -9,7 +10,6 @@ class TestCaseActor extends utest.Test {
 
 	function testActorInitial() {
 		// Check initial state
-		hiWorldActor.draw();
 		utest.Assert.equals("Hello World", hiWorldActor.message);
 	}
 
@@ -17,4 +17,5 @@ class TestCaseActor extends utest.Test {
 		hiWorldActor.signalCue("test_actor__bye", null);
 		utest.Assert.equals("Bye World", hiWorldActor.message);
 	}
+
 }

@@ -6,7 +6,7 @@ package hxscene;
  * The director is like an actor, but is behind the scenes making sure everything
  * goes to "plan". But directors can be actors as well, for the "prima donna" types.
  */
-interface IDirectorable extends IActorable {
+interface IDirectorable extends IEntity {
 
     /**
      * Sets an actor that this director will manage. This will automatically inform the director of all the actor's cues.
@@ -16,7 +16,7 @@ interface IDirectorable extends IActorable {
     public function addActor(actor:IActorable):Void;
 
     /**
-     * The dircetor will no longer manage the actor. This will automatically unregister all cues of the actor from the dircetor.
+     * The director will no longer manage the actor. This will automatically unregister all cues of the actor from the dircetor.
      * 
      * @param actor Reference to the actor instance that this director will no longer manage.
      */

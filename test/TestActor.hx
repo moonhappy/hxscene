@@ -15,8 +15,4 @@ class TestActor extends Actor {
 		message = "Bye World";
 	}
 
-	public override function draw() {
-		trace(message);
-	}
-
 }

@@ -15,4 +15,9 @@ interface IActorable extends IEntity extends IUpdateable extends IDrawable exten
      */
     public var director:IDirectorable;
 
+    /**
+     * Weak reference to the parent scene instance that manages this Actor.
+     */
+    public var scene:ISceneable;
+
 }

@@ -5,7 +5,7 @@ package hxscene;
  * 
  * The scene contains an assortment of actors.
  */
-interface ISceneable extends IEntity extends ISignalable extends ILoadable extends IUpdateable extends IDrawable {
+interface ISceneable extends IEntity extends ILoadable extends IUpdateable extends IDrawable {
 
     /**
      * Add an actor to the scene.
@@ -19,7 +19,7 @@ interface ISceneable extends IEntity extends ISignalable extends ILoadable exten
      * 
      * @param actor Reference to the actor.
      */
-     public function removeActor(actor:IActorable):Void;
+    public function removeActor(actor:IActorable):Void;
 
     /**
      * Add a director to the scene.
@@ -33,6 +33,13 @@ interface ISceneable extends IEntity extends ISignalable extends ILoadable exten
      * 
      * @param director Reference to the director.
      */
-     public function removeDirector(director:IDirectorable):Void;
+    public function removeDirector(director:IDirectorable):Void;
+
+    /**
+     * If draw layer of one or more entities changes, the scene should be informed to
+     * resort the registered entites to make the draw layers render in the correct order.
+     * This will be automatically called by Actor instances when the draw-layer is modified.
+     */
+    public function refreshDrawOrder():Void;
 
 }

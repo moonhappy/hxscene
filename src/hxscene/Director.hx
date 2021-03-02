@@ -6,23 +6,25 @@ package hxscene;
  * The director is like an actor, but is behind the scenes making sure everything
  * goes to "plan". But directors can be actors.
  */
-class Director extends Actor implements IDirectorable {
+class Director implements IDirectorable {
 
     private var actors:Array<IActorable>;
     private var registeredCues:Map<String, Array<IActorable>>;
 
     /**
 	 * Default constructor. By default, directors are not visible.
-	 * 
-	 * @param drawLayer The draw layer the actor will render to.
 	 */
-	public function new(drawLayer = 0) {
-        super(drawLayer);
+	public function new() {
+        this.id = -1;
         this.actors = new Array<IActorable>();
         this.registeredCues = new Map<String, Array<IActorable>>();
-        this.visible = false;
-        addActor(this);
 	}
+
+
+    /**
+     * The entity identification value.
+     */
+    public var id:Int;
 
 
     // IDirectorable
@@ -106,6 +108,41 @@ class Director extends Actor implements IDirectorable {
         }
     }
 
+
+    // ISignalable
+
+    /**
+	 * List of registered cues being monitored and the associated callback functions.
+     * Pure directors don't do cues, so calling this method will return `null`.
+	 * 
+	 * @return Map of all cues and associated callback functions that are registered.
+	 */
+	public function cues():Map<String, Array<(Any)->Void>> {
+        return null;
+    }
+
+	/**
+	 * Registers a cue for the object to monitor for and act on call.
+     * Pure directors don't do cues, so calling this method will do nothing.
+	 * 
+	 * @param cueName The name of the cue.
+	 * @param callback Reference to the callback function to invoke when the cue is called.
+	 */
+	public function registerCue(cueName:String, callback:(Any)->Void):Void {
+        return;
+    }
+
+	/**
+	 * Unregister a cue from the object.
+     * Pure directors don't do cues, so calling this method will do nothing.
+	 * 
+	 * @param cueName The name of the cue.
+	 * @param callback Reference to the callback function to invoke when the cue is called.
+	 */
+	public function unregisterCue(cueName:String, callback:(Any)->Void):Void {
+        return;
+    }
+
     /**
 	 * Calls a cue.
 	 * 
@@ -113,13 +150,8 @@ class Director extends Actor implements IDirectorable {
 	 * @param userData Additional data to pass to the cue function.
 	 * @param director Reference to the invoking director.
 	 */
-    public override function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null) {
+     public function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null):Void {
         if (cueName == null) {
-            return;
-        }
-        // Director to morph as actor if director is self.
-        if (director == this) {
-            super.signalCue(cueName, userData, director);
             return;
         }
         // Invoke actor cues

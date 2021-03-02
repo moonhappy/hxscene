@@ -10,11 +10,11 @@ package hxscene;
  */
 class Actor implements IActorable {
 
-	private var scene:ISceneable;
 	private var actorCues:Map<String, Array<(Any)->Void>>;
 	private var visible:Bool;
 	private var active:Bool;
 	private var loaded:Bool;
+	private var drawLayer:Int;
 
 	/**
      * The entity identification value.
@@ -22,14 +22,14 @@ class Actor implements IActorable {
 	public var id:Int;
 
 	/**
-	 * The draw layer specifies the ordering of when to call the object's `draw()` method in the draw cycle, relative to other objects.
-	 */
-	public var drawLayer:Int;
-
-	/**
      * Reference to the actor's assigned director.
      */
 	public var director:IDirectorable;
+
+	/**
+     * Weak reference to the parent scene instance that manages this Actor.
+     */
+	public var scene:ISceneable;
 
 	/**
 	 * Default constructor.
@@ -103,19 +103,28 @@ class Actor implements IActorable {
 		// By default, do nothing in the base class definition for update.
 	}
 
-	/**
-	 * Internal function for Scene to call. This is so the Actor object respects the `isActive()` state.
-	 * 
-	 * @param dt Time elapsed since last frame, normalized.
-	 */
-	public function _doUpdate(dt:Float):Void {
-		if (this.active) {
-			this.update(dt);
-		}
-	}
-
 
 	// IDrawable
+
+	/**
+	 * The draw layer specifies the ordering of when to call the object's `draw()` method in the draw cycle, relative to other objects.
+	 */
+	public function drawLayerValue():Int {
+		return this.drawLayer;
+	}
+
+	 /**
+	  * Change the drawable entity draw layer.
+	  * 
+	  * @param drawLayer The new draw layer to move the drawable entity to.
+	  */
+	public function changeDrawLayer(drawLayer:Int):Void {
+		this.drawLayer = drawLayer;
+		// Inform scene.
+		if (this.scene != null) {
+			this.scene.refreshDrawOrder();
+		}
+	}
 
 	/**
 	 * The current visibility state of the object.
@@ -140,15 +149,6 @@ class Actor implements IActorable {
 	 */
 	public function draw():Void {
 		// By default, do nothing in the base class definition for draw.
-	}
-
-	/**
-	 * Internal function for Scene to call. This is so the Actor object respects the `isVisible()` state.
-	 */
-	public function _doDraw():Void {
-		if (this.visible) {
-			this.draw();
-		}
 	}
 
 

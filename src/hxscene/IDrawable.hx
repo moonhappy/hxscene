@@ -10,7 +10,14 @@ interface IDrawable {
 	/**
 	 * The draw layer specifies the ordering of when to call the object's `draw()` method in the draw cycle, relative to other objects.
 	 */
-	public var drawLayer:Int;
+	public function drawLayerValue():Int;
+
+	/**
+	 * Change the drawable entity draw layer.
+	 * 
+	 * @param drawLayer The new draw layer to move the drawable entity to.
+	 */
+	public function changeDrawLayer(drawLayer:Int):Void;
 
 	/**
 	 * The current visibility state of the object.

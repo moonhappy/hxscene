@@ -5,7 +5,7 @@ package hxscene;
  * 
  * The stage is the platform to which scenes, directors, and actors collectively work on.
  */
-interface IStageable extends IEntity extends ILoadable extends ISignalable extends IUpdateable extends IDrawable {
+interface IStageable extends IEntity extends IUpdateable extends IDrawable {
 
     /**
      * List of all scenes.

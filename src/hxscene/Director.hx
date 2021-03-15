@@ -12,6 +12,11 @@ class Director implements IDirectorable {
     private var registeredCues:Map<Int, Array<IActorable>>;
 
     /**
+     * The entity identification value.
+     */
+     public var id:Int;
+
+    /**
 	 * Default constructor. By default, directors are not visible.
 	 */
 	public function new() {
@@ -19,12 +24,6 @@ class Director implements IDirectorable {
         this.actors = new Array<IActorable>();
         this.registeredCues = new Map<Int, Array<IActorable>>();
 	}
-
-
-    /**
-     * The entity identification value.
-     */
-    public var id:Int;
 
 
     // IDirectorable

@@ -1,8 +1,5 @@
 package hxscene;
 
-import haxe.macro.Expr.Catch;
-import haxe.ds.IntMap;
-
 /**
  * A scene.
  * 
@@ -11,20 +8,8 @@ import haxe.ds.IntMap;
 class Scene implements ISceneable {
 
     private var active:Bool;
-    private var visible:Bool;
     private var actors:Array<IActorable>;
     private var directors:Array<IDirectorable>;
-
-    /**
-	 * Default constructor.
-	 */
-	public function new() {
-        this.id = -1;
-        this.active = false;
-        this.visible = false;
-        this.actors = new Array<IActorable>();
-        this.directors = new Array<IDirectorable>();
-	}
 
 
     // IEntity
@@ -33,6 +18,17 @@ class Scene implements ISceneable {
      * The entity identification value.
      */
     public var id:Int;
+
+
+    /**
+	 * Default constructor.
+	 */
+	public function new() {
+        this.id = -1;
+        this.active = false;
+        this.actors = new Array<IActorable>();
+        this.directors = new Array<IDirectorable>();
+	}
 
 
     // ISceneable

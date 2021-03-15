@@ -8,7 +8,7 @@ class TestActor extends Actor {
 
 	public override function new() {
 		super();
-		registerCue("test_actor__bye", sayBye);
+		registerCue(11, sayBye);
 	}
 
 	public function sayBye(userData:Any) {

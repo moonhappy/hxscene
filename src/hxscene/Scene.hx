@@ -23,7 +23,7 @@ class Scene implements ISceneable {
         this.active = false;
         this.visible = false;
         this.actors = new Array<IActorable>();
-        this.drawLayer = 0;
+        this.directors = new Array<IDirectorable>();
 	}
 
 
@@ -98,17 +98,14 @@ class Scene implements ISceneable {
 	/**
 	 * Calls a cue. The scene will inform all directors of the cue being signalled.
 	 * 
-	 * @param cueName The name of the cue being called.
+	 * @param cueID The unique ID of the cue.
 	 * @param userData Additional data to pass to the cue function.
 	 * @param director Reference to the invoking director.
 	 */
-	public function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null):Void {
-        if (cueName == null) {
-            return;
-        }
+	public function signalCue(cueID:Int, userData:Any, ?director:IDirectorable = null):Void {
         // Call cue to all dircetors
         for (director in this.directors) {
-            director.signalCue(cueName, userData);
+            director.signalCue(cueID, userData);
         }
     }
 
@@ -199,243 +196,47 @@ class Scene implements ISceneable {
     // IDrawable
 
     /**
-	 * Scenes don't use draw layers, as they are omnipotent beings.
+	 * Scene's don't have a draw order. Calling this method will always return 0.
 	 */
-	public var drawLayer:Int;
+	public function drawLayerValue():Int {
+		return 0;
+	}
 
 	/**
-	 * The current visibility state of the scene.
+	 * Scene's don't have a draw order. Calling this method will do nothing.
 	 * 
-	 * @return If `true` the object's `draw()` method will be called during the draw cycle, otherwise it will be skipped.
+	 * @param drawLayer The new draw layer to move the drawable entity to.
+	 */
+	public function changeDrawLayer(drawLayer:Int):Void {
+	}
+
+	/**
+	 * Scenes are neither visible or invisible. Calling this method will just return true.
+	 * 
+	 * @return `true`
 	 */
 	public function isVisible():Bool {
-        return this.visible;
-    }
+		return true;
+	}
 
 	/**
-	 * Sets whether the object is visible or not. Visible objects will have `draw()` called, otherwise the object will be skipped during draw cycle.
+	 * Scenes are neither visible or invisible. Calling this method will do nothing.
 	 * 
-	 * @param visible If `true` the object's `draw()` method will be called during the draw cycle, otherwise it will be skipped.
+	 * @param visible Parameter is ignored.
 	 */
 	public function setVisible(visible:Bool):Void {
-        this.visible = visible;
-    }
-	
+	}
+
 	/**
-	 * The draw logic of the object. State should not be altered during the draw logic, as that is better handled by IUpdateable logic.
+	 * The draw logic of the scene.
 	 */
 	public function draw():Void {
-        if (this.visible == false) {
-            return;
-        }
-        // Draw all visible actors, which should already be in drawLayer ordering.
+		// Draw all visible actors, which should already be in drawLayer ordering.
         for (actor in this.actors) {
             if (actor.isVisible()) {
                 actor.draw();
             }
         }
-    }
+	}
 
-
-
-    // public function addActor(actor:IActorable):Void;
-
-    // public function addDirector(director:IDirectorable):Void;
-
-
-
-
-	
-    // // actors[draw layer][actor instace]
-    // public var actors:IntMap<Array<Actorable>>;
-    
-    // public var _drawLayers:Array<Int>;
-    
-    // public var cues:Array<ActorCue>;
-    // // public var mCues:IntMap<Array<MouseCue>>;
-    // // public var _mCueLayers:Array<Int>;
-	// public var id:Int;
-    // public var stage:Stage;
-    // // public var mouseOverCues:IntMap<Array<MouseCue>>;
-    // // public var _mouseOverLayers:Array<Int>;
-
-	// /**
-	//  * Default constructor.
-	//  */
-	// public function new() {
-	// 	this.actors = new Map<Int, Array<Actor>>();
-    //     this._drawLayers = new Array<Int>();
-    //     this.cues = new Array<ActorCue>();
-    //     // this.mCues = new Array<MouseCue>();
-    //     this.id = -1;
-    //     this.stage = null;
-    //     // this.mouseOverCues = [];
-    //     // this.mouseOverLayers = [];
-	// }
-
-	// public function _setAsCurrent() {
-    //     // Clear cues
-    //     this.cues = [];
-    //     // Configure all actors
-    //     var actorId = 0;
-    //     for (drawLayerActors in this.actors) {
-    //         for (actor in drawLayerActors) {
-    //             actorId++;
-    //             actor._setScene(actorId, this);
-    //         }
-    //     }
-    // }
-
-    // public function _clearDirectorActors(director:Director) {
-    //     // First pass to determine what actors should be marked for removal.
-    //     var markedForRemoval = new IntMap<Array<Int>>();
-    //     for (drawLayer in this.actors.keys()) {
-    //         var drawLayerActors = this.actors.get(drawLayer);
-    //         for (actorIndex in 0...drawLayerActors.length) {
-    //             var actor = drawLayerActors[drawLayer];
-    //             if (actor.director != director) {
-    //                 continue;
-    //             }
-    //             // Mark for removal
-    //             if (markedForRemoval.get(drawLayer) == null) {
-    //                 markedForRemoval.set(drawLayer, new Array<Int>());
-    //             }
-    //             var drawLayerRemovals = markedForRemoval.get(drawLayer);
-    //             drawLayerRemovals.push(actorIndex);
-    //         }
-    //     }
-    //     // Second pass to remove all marked for removal.
-    //     for (drawLayer in markedForRemoval.keys()) { 
-    //         var drawLayerActorIndexesToRemove = markedForRemoval.get(drawLayer);
-    //         var drawLayerActors = this.actors.get(drawLayer);
-    //         for (actorIndex in drawLayerActorIndexesToRemove) {
-    //             drawLayerActors.splice(actorIndex, 1);
-    //         }
-    //     }
-    // }
-
-    // public function addActor(actor:Actor) {
-    //     // Add the actor to the scene.
-    //     if (this.actors.get(actor.drawLayer) == null) {
-    //         this.actors.set(actor.drawLayer, new Array<Actor>());
-    //     }
-    //     this.actors.get(actor.drawLayer).push(actor);
-    //     // Sort draw layers so that draw ordering follows the painters algorithm.
-    //     // I.E. Lowest layer drawn first and ascending draw order to greatest value layer.
-    //     var orderedDrawLayers = new Array<Int>();
-    //     for (drawLayer in this.actors.keys()) {
-    //         orderedDrawLayers.push(drawLayer);
-    //     }
-    //     orderedDrawLayers.sort(function(layerA:Int, layerB:Int) {
-    //         return layerA - layerB;
-    //     });
-    //     this._drawLayers = orderedDrawLayers;
-    // }
-
-    // public function addDirector(director:Director) {
-    //     this.addActor(director);
-    // }
-
-    // // public function _addMouseCue(watch:MouseCue) {
-    // //     // Add mouse cue to the scene.
-    // //     if (this.mCues.get(watch.obj.drawLayer) == null) {
-    // //         this.mCues.set(watch.obj.drawLayer, new Array<MouseCue>());
-    // //     }
-    // //     this.mCues.get(watch.obj.drawLayer).push(watch);
-    // //     // Sort mouse watch layers, where mouse detection works from forefround to background,
-    // //     // thus in reverse order to painters algorithm.
-    // //     var orderedDrawLayers = new Array<Int>();
-    // //     for (drawLayer in this.mCues.keys()) {
-    // //         orderedDrawLayers.push(drawLayer);
-    // //     }
-    // //     orderedDrawLayers.sort(function(layerA:Int, layerB:Int) {
-    // //         return layerB - layerA;
-    // //     });
-    // //     this._mCueLayers = orderedDrawLayers;
-    // // }
-
-    // // public function _addMouseOverCue(watch:MouseCue) {
-    // //     // Add mouse cue to the scene.
-    // //     if (this.mouseOverCues.get(watch.obj.drawLayer) == null) {
-    // //         this.mouseOverCues.set(watch.obj.drawLayer, new Array<MouseCue>());
-    // //     }
-    // //     this.mouseOverCues.get(watch.obj.drawLayer).push(watch);
-    // //     // Sort mouse watch layers, where mouse detection works from forefround to background,
-    // //     // thus in reverse order to painters algorithm.
-    // //     var orderedDrawLayers = new Array<Int>();
-    // //     for (drawLayer in this.mouseOverCues.keys()) {
-    // //         orderedDrawLayers.push(drawLayer);
-    // //     }
-    // //     orderedDrawLayers.sort(function(layerA:Int, layerB:Int) {
-    // //         return layerB - layerA;
-    // //     });
-    // //     this._mouseOverLayers = orderedDrawLayers;
-    // // }
-
-    // public function signalCue(eventName:String, userData:Any) {
-    //     _signalCue(eventName, this, userData);
-    // }
-
-    // public function _signalCue(eventName:String, obj:Any, userData:Any) {
-    //     for (cue in this.cues) {
-    //         if (cue.cue == eventName && (cue.dir == null || (cue.dir.isActive() && cue.dir == obj))) {
-    //             Reflect.callMethod(cue.obj, Reflect.field(cue.obj, cue.cb), [userData]);
-    //         }
-    //     }
-    // }
-
-    // // public function signalMouseCue(target:Any, x:Int, y:Int, isTap:Bool) {
-    // //     // Traverse from foreground to background draw layer order of actors.
-    // //     for (drawLayer in this._mCueLayers) {
-    // //         for (m in this.mCues.get(drawLayer)) {
-    // //             // Check if there is a "hit" within the mouse cue hit region
-    // //             if (m.r.x <= x && x <= (m.r.x + m.r.w) && m.r.y <= y && y <= (m.r.y + m.r.h)) {
-    // //                 var shouldStop = Reflect.callMethod(m.obj, Reflect.field(m.obj, m.cb), [m.obj, target, x, y, isTap]);
-    // //                 if (shouldStop) {
-    // //                     return;
-    // //                 }
-    // //             }
-    // //         }
-    // //     }
-    // // }
-
-    // public function load() {
-    //     for (drawLayerActors in this.actors) {
-    //         for (actor in drawLayerActors) {
-    //             actor.load();
-    //         }
-    //     }
-    // }
-
-    // // public function _mouseOverUpdate(dt:Float, mx:Int, my:Int) {
-    // //     // Mouse over.
-    // //     for (n in this._mouseOverLayers) {
-    // //         for (m in this.mouseOverCues.get(n)) {
-    // //             if (m.r.x <= mx && mx <= (m.r.x + m.r.w) && m.r.y <= my && my <= (m.r.y + m.r.h)) {
-    // //                 var shouldStop = Reflect.callMethod(m.obj, Reflect.field(m.obj, m.cb), [m.obj, dt, mx, my]);
-    // //                 if (shouldStop) {
-    // //                     return;
-    // //                 }
-    // //             }
-    // //         }
-    // //     }
-    // // }
-
-    // public function update(dt:Float) {
-    //     // Actor updates
-    //     for (v in this.actors) {
-    //         for (a in v) {
-    //             a._doUpdate(dt);
-    //         }
-    //     }
-    // }
-
-    // public function draw() {
-    //     // Painters algorithm for draw order.
-    //     for (k in this._drawLayers) {
-    //         for (a in this.actors.get(k)) {
-    //             a._doDraw();
-    //         }
-    //     }
-    // }
 }

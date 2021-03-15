@@ -12,31 +12,31 @@ interface ISignalable {
 	 * 
 	 * @return Map of all cues and associated callback functions that are registered.
 	 */
-	public function cues():Map<String, Array<(Any)->Void>>;
+	public function cues():Map<Int, Array<(Any)->Void>>;
 
 	/**
 	 * Registers a cue for the object to monitor for and act on call.
 	 * 
-	 * @param cueName The name of the cue.
+	 * @param cueID The unique ID of the cue.
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
-	public function registerCue(cueName:String, callback:(Any)->Void):Void;
+	public function registerCue(cueID:Int, callback:(Any)->Void):Void;
 
 	/**
 	 * Unregister a cue from the object.
 	 * 
-	 * @param cueName The name of the cue.
+	 * @param cueID The unique ID of the cue.
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
-	public function unregisterCue(cueName:String, callback:(Any)->Void):Void;
+	public function unregisterCue(cueID:Int, callback:(Any)->Void):Void;
 
 	/**
 	 * Calls a cue.
 	 * 
-	 * @param cueName The name of the cue being called.
+	 * @param cueID The unique ID of the cue.
 	 * @param userData Additional data to pass to the cue function.
 	 * @param director Reference to the invoking director.
 	 */
-	public function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null):Void;
+	public function signalCue(cueID:Int, userData:Any, ?director:IDirectorable = null):Void;
 
 }

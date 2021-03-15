@@ -14,7 +14,7 @@ class TestCaseActor extends utest.Test {
 	}
 
 	function testActorSignal() {
-		hiWorldActor.signalCue("test_actor__bye", null);
+		hiWorldActor.signalCue(11, null);
 		utest.Assert.equals("Bye World", hiWorldActor.message);
 	}
 

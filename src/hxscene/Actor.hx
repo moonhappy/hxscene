@@ -10,7 +10,7 @@ package hxscene;
  */
 class Actor implements IActorable {
 
-	private var actorCues:Map<String, Array<(Any)->Void>>;
+	private var actorCues:Map<Int, Array<(Any)->Void>>;
 	private var visible:Bool;
 	private var active:Bool;
 	private var loaded:Bool;
@@ -41,7 +41,7 @@ class Actor implements IActorable {
 		this.drawLayer = drawLayer;
 		this.scene = null;
 		this.director = null;
-		this.actorCues = new Map<String, Array<(Any)->Void>>();
+		this.actorCues = new Map<Int, Array<(Any)->Void>>();
 		this.visible = true;
 		this.active = true;
 		this.loaded = false;
@@ -159,28 +159,28 @@ class Actor implements IActorable {
 	 * 
 	 * @return Map of all cues and associated callback functions that are registered.
 	 */
-	public function cues():Map<String, Array<(Any)->Void>> {
+	public function cues():Map<Int, Array<(Any)->Void>> {
 		return this.actorCues;
 	}
 
 	/**
 	 * Registers a cue for the object to monitor for and act on call.
 	 * 
-	 * @param cueName The name of the cue.
+	 * @param cueID The unique ID of the cue.
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
-	public function registerCue(cueName:String, callback:(Any)->Void):Void {
+	public function registerCue(cueID:Int, callback:(Any)->Void):Void {
 		// Check params
-		if (cueName == null || callback == null) {
+		if (callback == null) {
 			return;
 		}
 		// Initial state, create new array
-		if (this.actorCues.exists(cueName) == false) {
-			this.actorCues.set(cueName, [callback]);
+		if (this.actorCues.exists(cueID) == false) {
+			this.actorCues.set(cueID, [callback]);
 			return;
 		}
 		// Check if cue already registered and cancel if found.
-		var cbArray = this.actorCues.get(cueName);
+		var cbArray = this.actorCues.get(cueID);
 		for (cb in cbArray) {
 			if (cb == callback) {
 				return;
@@ -190,23 +190,23 @@ class Actor implements IActorable {
 		cbArray.push(callback);
 		// Inform director, for better performance instead of cue signalling needing to check all actors.
 		if (this.director != null) {
-			this.director.informActorCueRegistered(cueName, this);
+			this.director.informActorCueRegistered(cueID, this);
 		}
 	}
 
 	/**
 	 * Unregister a cue from the object.
 	 * 
-	 * @param cueName The name of the cue.
+	 * @param cueID The unique ID of the cue.
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
-	public function unregisterCue(cueName:String, callback:(Any)->Void):Void {
+	public function unregisterCue(cueID:Int, callback:(Any)->Void):Void {
 		// Check params
-		if (cueName == null || callback == null) {
+		if (callback == null) {
 			return;
 		}
 		// Check if cue already registered and cancel if not.
-		var cbArray = this.actorCues.get(cueName);
+		var cbArray = this.actorCues.get(cueID);
 		if (cbArray == null) {
 			return;
 		}
@@ -214,19 +214,19 @@ class Actor implements IActorable {
 		cbArray.remove(callback);
 		// Inform the director, for better performance.
 		if (this.director != null) {
-			this.director.informActorCueUnregistered(cueName, this);
+			this.director.informActorCueUnregistered(cueID, this);
 		}
 	}
 
 	/**
 	 * Calls a cue.
 	 * 
-	 * @param cueName The name of the cue being called.
+	 * @param cueID The unique ID of the cue.
 	 * @param userData Additional data to pass to the cue function.
 	 * @param director Reference to the invoking director.
 	 */
-	public function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null):Void {
-		var signals = this.actorCues.get(cueName);
+	public function signalCue(cueID:Int, userData:Any, ?director:IDirectorable = null):Void {
+		var signals = this.actorCues.get(cueID);
 		if (signals == null) {
 			return;
 		}

@@ -25,17 +25,17 @@ interface IDirectorable extends IEntity extends ISignalable {
     /**
      * For performance sake, when an actor managed by this director has a new cue registered, the dircetor is informed.
      * 
-     * @param cueName The name of the cue.
+     * @param cueID The unique ID of the cue.
      * @param actor Reference to the actor monitoring for the cue.
      */
-    public function informActorCueRegistered(cueName:String, actor:IActorable):Void;
+    public function informActorCueRegistered(cueID:Int, actor:IActorable):Void;
 
     /**
      * For performance sake, when an actor managed by this director has a cue unregistered, the dircetor is informed.
      * 
-     * @param cueName The name of the cue.
+     * @param cueID The unique ID of the cue.
      * @param actor Reference to the actor monitoring for the cue.
      */
-    public function informActorCueUnregistered(cueName:String, actor:IActorable):Void;
+    public function informActorCueUnregistered(cueID:Int, actor:IActorable):Void;
 
 }

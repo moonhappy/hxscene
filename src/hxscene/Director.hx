@@ -9,7 +9,7 @@ package hxscene;
 class Director implements IDirectorable {
 
     private var actors:Array<IActorable>;
-    private var registeredCues:Map<String, Array<IActorable>>;
+    private var registeredCues:Map<Int, Array<IActorable>>;
 
     /**
 	 * Default constructor. By default, directors are not visible.
@@ -17,7 +17,7 @@ class Director implements IDirectorable {
 	public function new() {
         this.id = -1;
         this.actors = new Array<IActorable>();
-        this.registeredCues = new Map<String, Array<IActorable>>();
+        this.registeredCues = new Map<Int, Array<IActorable>>();
 	}
 
 
@@ -43,8 +43,8 @@ class Director implements IDirectorable {
         actor.director = this;
         // Inform director of all the actor's cues to be registered.
         var actorCues = actor.cues();
-        for (cueName in actorCues.keys()) {
-            informActorCueRegistered(cueName, actor);
+        for (cueID in actorCues.keys()) {
+            informActorCueRegistered(cueID, actor);
         }
     }
 
@@ -62,22 +62,22 @@ class Director implements IDirectorable {
         actor.director = null;
         // Inform director of all the actor's cues to be unregistered.
         var actorCues = actor.cues();
-        for (cueName in actorCues.keys()) {
-            informActorCueUnregistered(cueName, actor);
+        for (cueID in actorCues.keys()) {
+            informActorCueUnregistered(cueID, actor);
         }
     }
  
     /**
      * For performance sake, when an actor managed by this director has a new cue registered, the director is informed.
      * 
-     * @param cueName The name of the cue.
+     * @param cueID The unique ID of the cue.
      * @param actor Reference to the actor monitoring for the cue.
      */
-    public function informActorCueRegistered(cueName:String, actor:IActorable):Void {
-        var actors = this.registeredCues.get(cueName);
+    public function informActorCueRegistered(cueID:Int, actor:IActorable):Void {
+        var actors = this.registeredCues.get(cueID);
         // Cue may not be registered yet
         if (actors == null) {
-            this.registeredCues.set(cueName, [actor]);
+            this.registeredCues.set(cueID, [actor]);
             return;
         }
         // If actor already registered for the cue, skip.
@@ -91,11 +91,11 @@ class Director implements IDirectorable {
     /**
      * For performance sake, when an actor managed by this director has a cue unregistered, the director is informed.
      * 
-     * @param cueName The name of the cue.
+     * @param cueID The unique ID of the cue.
      * @param actor Reference to the actor monitoring for the cue.
      */
-    public function informActorCueUnregistered(cueName:String, actor:IActorable):Void {
-        var actors = this.registeredCues.get(cueName);
+    public function informActorCueUnregistered(cueID:Int, actor:IActorable):Void {
+        var actors = this.registeredCues.get(cueID);
         // Cue may not be registered yet
         if (actors == null) {
             return;
@@ -104,7 +104,7 @@ class Director implements IDirectorable {
         actors.remove(actor);
         // If no more actors monitoring the cue, remove cue entirely from the map.
         if (actors.length == 0) {
-            this.registeredCues.remove(cueName);
+            this.registeredCues.remove(cueID);
         }
     }
 
@@ -117,7 +117,7 @@ class Director implements IDirectorable {
 	 * 
 	 * @return Map of all cues and associated callback functions that are registered.
 	 */
-	public function cues():Map<String, Array<(Any)->Void>> {
+	public function cues():Map<Int, Array<(Any)->Void>> {
         return null;
     }
 
@@ -125,10 +125,10 @@ class Director implements IDirectorable {
 	 * Registers a cue for the object to monitor for and act on call.
      * Pure directors don't do cues, so calling this method will do nothing.
 	 * 
-	 * @param cueName The name of the cue.
+	 * @param cueID The unique ID of the cue.
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
-	public function registerCue(cueName:String, callback:(Any)->Void):Void {
+	public function registerCue(cueID:Int, callback:(Any)->Void):Void {
         return;
     }
 
@@ -136,31 +136,28 @@ class Director implements IDirectorable {
 	 * Unregister a cue from the object.
      * Pure directors don't do cues, so calling this method will do nothing.
 	 * 
-	 * @param cueName The name of the cue.
+	 * @param cueID The unique ID of the cue.
 	 * @param callback Reference to the callback function to invoke when the cue is called.
 	 */
-	public function unregisterCue(cueName:String, callback:(Any)->Void):Void {
+	public function unregisterCue(cueID:Int, callback:(Any)->Void):Void {
         return;
     }
 
     /**
 	 * Calls a cue.
 	 * 
-	 * @param cueName The name of the cue being called.
+	 * @param cueID The unique ID of the cue.
 	 * @param userData Additional data to pass to the cue function.
 	 * @param director Reference to the invoking director.
 	 */
-     public function signalCue(cueName:String, userData:Any, ?director:IDirectorable = null):Void {
-        if (cueName == null) {
-            return;
-        }
+     public function signalCue(cueID:Int, userData:Any, ?director:IDirectorable = null):Void {
         // Invoke actor cues
-        var cues = this.registeredCues.get(cueName);
+        var cues = this.registeredCues.get(cueID);
         if (cues == null) {
             return;
         }
         for (actor in cues) {
-            actor.signalCue(cueName, userData, this);
+            actor.signalCue(cueID, userData, this);
         }
     }
 

@@ -8,7 +8,7 @@ class TestActorObidient extends Actor {
 
 	public function new() {
 		super();
-		registerCue("director_says_hi", sayHi);
+		registerCue(10, sayHi);
 	}
 
 	public function sayHi(userData:Any) {

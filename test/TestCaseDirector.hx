@@ -18,7 +18,7 @@ class TestCaseDirector extends utest.Test {
 	}
 
 	function testDirectorSignal() {
-		hiWorldDirector.signalCue("director_says_hi", null);
+		hiWorldDirector.signalCue(10, null);
 		utest.Assert.equals("Director says hi", hiWorldActor.message);
 	}
 	
